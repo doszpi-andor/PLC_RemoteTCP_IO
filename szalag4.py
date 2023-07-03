@@ -6,6 +6,12 @@ from _view.remote_io_view import RemoteIOView
 from _view.sensor_canvas import SensorCanvas
 from _view.silo_camvas import SiloCanvas
 
+
+class Data:
+    input_index = {'S1': 0, 'S2': 1, 'S3': 2, 'S4': 3}
+    output_index = {'M1': 0, 'M2_Bal': 1, 'M2_Jobb': 2, 'M3': 3, 'M4': 4}
+
+
 class ErrorCheckBox(Frame):
 
     def __init__(self,
@@ -201,6 +207,8 @@ class App(RemoteIOView):
 
         self.conveyors.pack()
         self.error_check.pack()
+
+        self.remote_data.input_bits[Data.input_index['S1']] = True
 
 
 if __name__ == '__main__':
