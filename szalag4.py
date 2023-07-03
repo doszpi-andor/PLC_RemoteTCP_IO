@@ -225,8 +225,17 @@ class App(RemoteIOView):
         if self.remote_data.output_data_bit_is_change(Data.output_index['M2_Bal']):
             if self.remote_data.output_bits[Data.output_index['M2_Bal']]:
                 self.conveyors.conveyor1_change_motor_color(motor_color='green', left_color='green', right_color='gray')
-                s2_delay = Timer(1.5, self.s2_changed)
-                s2_delay.start()
+                s2_left_delay = Timer(1.5, self.s2_changed)
+                s2_left_delay.start()
+            else:
+                self.conveyors.conveyor1_change_motor_color(motor_color='gray', left_color='gray', right_color='gray')
+                self.s2_changed()
+
+        if self.remote_data.output_data_bit_is_change(Data.output_index['M2_Jobb']):
+            if self.remote_data.output_bits[Data.output_index['M2_Jobb']]:
+                self.conveyors.conveyor1_change_motor_color(motor_color='green', left_color='gray', right_color='green')
+                s2_right_delay = Timer(1.5, self.s2_changed)
+                s2_right_delay.start()
             else:
                 self.conveyors.conveyor1_change_motor_color(motor_color='gray', left_color='gray', right_color='gray')
                 self.s2_changed()
@@ -265,7 +274,7 @@ class App(RemoteIOView):
             self.remote_data.input_bits[Data.input_index['S2']] = False
         else:
             if self.remote_data.output_bits[Data.output_index['M2_Bal']] or \
-                    self.remote_data.output_bits[Data.output_index['M2_Bal']]:
+                    self.remote_data.output_bits[Data.output_index['M2_Jobb']]:
                 self.conveyors.conveyor1_change_sensor_color(sensor_color='green')
                 self.remote_data.input_bits[Data.input_index['S2']] = True
             else:
@@ -289,7 +298,7 @@ class App(RemoteIOView):
             self.conveyors.conveyor3_change_sensor_color(sensor_color='red')
             self.remote_data.input_bits[Data.input_index['S3']] = False
         else:
-            if self.remote_data.output_bits[Data.output_index['M3']]:
+            if self.remote_data.output_bits[Data.output_index['M4']]:
                 self.conveyors.conveyor3_change_sensor_color(sensor_color='green')
                 self.remote_data.input_bits[Data.input_index['S4']] = True
             else:
