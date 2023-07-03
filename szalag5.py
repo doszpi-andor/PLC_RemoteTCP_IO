@@ -239,9 +239,9 @@ class App(RemoteIOView):
     def s4_changed(self):
         if self.error_check.error2_var.get():
             self.conveyors.conveyor2_change_sensor_color(sensor_color='red')
-            self.remote_data.input_bits[Data.input_index['S3']] = False
+            self.remote_data.input_bits[Data.input_index['S4']] = False
         else:
-            if self.remote_data.output_bits[Data.output_index['M3']]:
+            if self.remote_data.output_bits[Data.output_index['M4']]:
                 self.conveyors.conveyor2_change_sensor_color(sensor_color='green')
                 self.remote_data.input_bits[Data.input_index['S4']] = True
             else:
