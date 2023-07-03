@@ -1,3 +1,4 @@
+from threading import Timer
 from tkinter import Checkbutton, IntVar, Frame
 
 from _view.conveyor_canvas import ConveyorCanvas
@@ -107,7 +108,7 @@ class Conveyors(SiloCanvas, ConveyorCanvas, SensorCanvas, IndicatorCanvas):
             self.__silo_sensor_color = sensor_color
             self.__silo_drawing()
 
-    def conveyor1_change_color(self, motor_color, left_color, right_color):
+    def conveyor1_change_motor_color(self, motor_color, left_color, right_color):
         if self.__conveyor1_motor_color != motor_color:
             self.__conveyor1_motor_color = motor_color
             self.__conveyor1_drawing()
@@ -119,7 +120,7 @@ class Conveyors(SiloCanvas, ConveyorCanvas, SensorCanvas, IndicatorCanvas):
             self.__direction_right_drawing()
 
     def conveyor1_change_sensor_color(self, sensor_color):
-        if self.__conveyor1_left_color != sensor_color:
+        if self.__conveyor1_sensor_color != sensor_color:
             self.__conveyor1_sensor_color = sensor_color
             self.__conveyor1_drawing()
 
@@ -202,13 +203,98 @@ class App(RemoteIOView):
 
         self.name.configure(text='Szalag 4 Remote IO')
 
-        self.error_check = ErrorCheckBox(self.process_frame)
+        self.error_check = ErrorCheckBox(self.process_frame,
+                                         silo_process=self.s1_changed,
+                                         error1_process=self.s2_changed,
+                                         error2_process=self.s3_changed,
+                                         error3_process=self.s4_changed)
         self.conveyors = Conveyors(self.process_frame)
 
         self.conveyors.pack()
         self.error_check.pack()
 
         self.remote_data.input_bits[Data.input_index['S1']] = True
+
+    def loop(self):
+        if self.remote_data.output_data_bit_is_change(Data.output_index['M1']):
+            if self.remote_data.output_bits[Data.output_index['M1']]:
+                self.conveyors.silo_change_motor_color(motor_color='green')
+            else:
+                self.conveyors.silo_change_motor_color(motor_color='gray')
+
+        if self.remote_data.output_data_bit_is_change(Data.output_index['M2_Bal']):
+            if self.remote_data.output_bits[Data.output_index['M2_Bal']]:
+                self.conveyors.conveyor1_change_motor_color(motor_color='green', left_color='green', right_color='gray')
+                s2_delay = Timer(1.5, self.s2_changed)
+                s2_delay.start()
+            else:
+                self.conveyors.conveyor1_change_motor_color(motor_color='gray', left_color='gray', right_color='gray')
+                self.s2_changed()
+
+        if self.remote_data.output_data_bit_is_change(Data.output_index['M3']):
+            if self.remote_data.output_bits[Data.output_index['M3']]:
+                self.conveyors.conveyor2_change_motor_color(motor_color='green')
+                s3_delay = Timer(1.5, self.s3_changed)
+                s3_delay.start()
+            else:
+                self.conveyors.conveyor2_change_motor_color(motor_color='gray')
+                self.s3_changed()
+
+        if self.remote_data.output_data_bit_is_change(Data.output_index['M4']):
+            if self.remote_data.output_bits[Data.output_index['M4']]:
+                self.conveyors.conveyor3_change_motor_color(motor_color='green')
+                s4_delay = Timer(1.5, self.s4_changed)
+                s4_delay.start()
+            else:
+                self.conveyors.conveyor3_change_motor_color(motor_color='gray')
+                self.s4_changed()
+
+        super().loop()
+
+    def s1_changed(self):
+        if self.error_check.silo_var.get():
+            self.conveyors.silo_change_sensor_color(sensor_color='gray')
+            self.remote_data.input_bits[Data.input_index['S1']] = False
+        else:
+            self.conveyors.silo_change_sensor_color(sensor_color='red')
+            self.remote_data.input_bits[Data.input_index['S1']] = True
+
+    def s2_changed(self):
+        if self.error_check.error1_var.get():
+            self.conveyors.conveyor1_change_sensor_color(sensor_color='red')
+            self.remote_data.input_bits[Data.input_index['S2']] = False
+        else:
+            if self.remote_data.output_bits[Data.output_index['M2_Bal']] or \
+                    self.remote_data.output_bits[Data.output_index['M2_Bal']]:
+                self.conveyors.conveyor1_change_sensor_color(sensor_color='green')
+                self.remote_data.input_bits[Data.input_index['S2']] = True
+            else:
+                self.conveyors.conveyor1_change_sensor_color(sensor_color='gray')
+                self.remote_data.input_bits[Data.input_index['S2']] = False
+
+    def s3_changed(self):
+        if self.error_check.error2_var.get():
+            self.conveyors.conveyor2_change_sensor_color(sensor_color='red')
+            self.remote_data.input_bits[Data.input_index['S3']] = False
+        else:
+            if self.remote_data.output_bits[Data.output_index['M3']]:
+                self.conveyors.conveyor2_change_sensor_color(sensor_color='green')
+                self.remote_data.input_bits[Data.input_index['S3']] = True
+            else:
+                self.conveyors.conveyor2_change_sensor_color(sensor_color='gray')
+                self.remote_data.input_bits[Data.input_index['S3']] = False
+
+    def s4_changed(self):
+        if self.error_check.error3_var.get():
+            self.conveyors.conveyor3_change_sensor_color(sensor_color='red')
+            self.remote_data.input_bits[Data.input_index['S3']] = False
+        else:
+            if self.remote_data.output_bits[Data.output_index['M3']]:
+                self.conveyors.conveyor3_change_sensor_color(sensor_color='green')
+                self.remote_data.input_bits[Data.input_index['S4']] = True
+            else:
+                self.conveyors.conveyor3_change_sensor_color(sensor_color='gray')
+                self.remote_data.input_bits[Data.input_index['S4']] = False
 
 
 if __name__ == '__main__':
