@@ -3,7 +3,7 @@ from tkinter import Tk, Label, Frame
 from _socket import gethostbyname, gethostname
 
 from _data.remote_data import RemoteData
-from _tcp_connect.plc_tcp_connect import TCPConnect
+from _tcp_connect.tcp_connect import TCPConnect
 from _threading.thread_loop import ThreadLoop
 
 
