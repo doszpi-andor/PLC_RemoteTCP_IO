@@ -1,8 +1,37 @@
+from tkinter import Checkbutton, IntVar, Frame
+
 from _view.conveyor_canvas import ConveyorCanvas
 from _view.indicator_canvas import IndicatorCanvas
 from _view.remote_io_view import RemoteIOView
 from _view.sensor_canvas import SensorCanvas
 from _view.silo_camvas import SiloCanvas
+
+class ErrorCheckBox(Frame):
+
+    def __init__(self,
+                 master=None,
+                 silo_process=None,
+                 error1_process=None,
+                 error2_process=None,
+                 error3_process=None,
+                 cnf={}, **kw):
+        super().__init__(master, cnf, **kw)
+
+        self.silo_var = IntVar()
+        self.silo = Checkbutton(self, variable=self.silo_var, command=silo_process, text='Siló kifogyott')
+
+        self.error1_var = IntVar()
+        self.error1 = Checkbutton(self, variable=self.error1_var, command=error1_process, text='Szalag 1 hiba')
+        self.error2_var = IntVar()
+        self.error2 = Checkbutton(self, variable=self.error2_var, command=error2_process, text='Szalag 2 hiba')
+        self.error3_var = IntVar()
+        self.error3 = Checkbutton(self, variable=self.error3_var, command=error3_process, text='Szalag 3 hiba')
+
+        self.silo.grid(row=1, column=1, columnspan=3)
+
+        self.error1.grid(row=2, column=1)
+        self.error2.grid(row=2, column=2)
+        self.error3.grid(row=2, column=3)
 
 
 class Conveyors(SiloCanvas, ConveyorCanvas, SensorCanvas, IndicatorCanvas):
@@ -167,9 +196,11 @@ class App(RemoteIOView):
 
         self.name.configure(text='Szalag 4 Remote IO')
 
+        self.error_check = ErrorCheckBox(self.process_frame)
         self.conveyors = Conveyors(self.process_frame)
 
         self.conveyors.pack()
+        self.error_check.pack()
 
 
 if __name__ == '__main__':
