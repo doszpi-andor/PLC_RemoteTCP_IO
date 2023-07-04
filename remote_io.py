@@ -5,6 +5,7 @@ from _view.remote_io_view import RemoteIOView
 
 class InputView(Frame):
 
+    # noinspection PyDefaultArgument
     def __init__(self, master=None, cnf={}, **kw):
         super().__init__(master, cnf, **kw)
         Label(self, text='Remote Input').grid(row=1, column=1, columnspan=8)
@@ -44,6 +45,7 @@ class InputView(Frame):
 
 class OutputView(Frame):
 
+    # noinspection PyDefaultArgument
     def __init__(self, master=None, cnf={}, **kw):
         super().__init__(master, cnf, **kw)
         Label(self, text='Remote Output').grid(row=1, column=1, columnspan=8)
@@ -83,6 +85,7 @@ class OutputView(Frame):
 
 class App(RemoteIOView):
 
+    # noinspection PyPep8Naming
     def __init__(self, screenName=None, baseName=None, className='Tk', useTk=1, sync=0, use=None):
         super().__init__(screenName, baseName, className, useTk, sync, use)
 

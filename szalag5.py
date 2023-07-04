@@ -14,6 +14,7 @@ class Data:
 
 class ErrorCheckBox(Frame):
 
+    # noinspection PyDefaultArgument
     def __init__(self,
                  master=None,
                  silo1_process=None,
@@ -24,13 +25,17 @@ class ErrorCheckBox(Frame):
         super().__init__(master, cnf, **kw)
 
         self.silo1_var = IntVar()
+        # noinspection SpellCheckingInspection
         self.silo1 = Checkbutton(self, variable=self.silo1_var, command=silo1_process, text='Siló 1 kifogyott')
         self.silo2_var = IntVar()
+        # noinspection SpellCheckingInspection
         self.silo2 = Checkbutton(self, variable=self.silo2_var, command=silo2_process, text='Siló 2 kifogyott')
 
         self.error1_var = IntVar()
+        # noinspection SpellCheckingInspection
         self.error1 = Checkbutton(self, variable=self.error1_var, command=error1_process, text='Szalag 1 hiba')
         self.error2_var = IntVar()
+        # noinspection SpellCheckingInspection
         self.error2 = Checkbutton(self, variable=self.error2_var, command=error2_process, text='Szalag 2 hiba')
 
         self.silo1.grid(row=1, column=1)
@@ -64,6 +69,7 @@ class Conveyors(ConveyorCanvas, SiloCanvas, SensorCanvas):
     FULL_WIDTH = CONVEYOR2_X_POSITION + CONVEYOR2_LENGTH
     FULL_HEIGHT = CONVEYOR2_Y_POSITION + CONVEYOR_WIDTH
 
+    # noinspection PyDefaultArgument
     def __init__(self, master=None, cnf={}, **kw):
         super().__init__(master, cnf, width=self.FULL_WIDTH, height=self.FULL_HEIGHT, **kw)
 
@@ -122,6 +128,7 @@ class Conveyors(ConveyorCanvas, SiloCanvas, SensorCanvas):
             self.__conveyor2_drawing()
 
     def __silo1_drawing(self):
+        # noinspection SpellCheckingInspection
         self.create_silo(self.SILO1_X_POSITION,
                          self.SILO_Y_POSITION,
                          silo_name='Siló 1',
@@ -132,6 +139,7 @@ class Conveyors(ConveyorCanvas, SiloCanvas, SensorCanvas):
                            name='S1', color=self.silo1_sensor_color)
 
     def __silo2_drawing(self):
+        # noinspection SpellCheckingInspection
         self.create_silo(self.SILO2_X_POSITION,
                          self.SILO_Y_POSITION,
                          silo_name='Siló 2',
@@ -142,6 +150,7 @@ class Conveyors(ConveyorCanvas, SiloCanvas, SensorCanvas):
                            name='S2', color=self.silo2_sensor_color)
 
     def __conveyor1_drawing(self):
+        # noinspection SpellCheckingInspection
         self.create_conveyor(self.CONVEYOR1_X_POSITION,
                              self.CONVEYOR1_Y_POSITION,
                              length=self.CONVEYOR1_LENGTH, name='Szalag 1',
@@ -149,6 +158,7 @@ class Conveyors(ConveyorCanvas, SiloCanvas, SensorCanvas):
                              circle2_name='S3', circle2_color=self.conveyor1_sensor_color)
 
     def __conveyor2_drawing(self):
+        # noinspection SpellCheckingInspection
         self.create_conveyor(self.CONVEYOR2_X_POSITION,
                              self.CONVEYOR2_Y_POSITION,
                              length=self.CONVEYOR2_LENGTH, name='Szalag 2',
@@ -158,9 +168,11 @@ class Conveyors(ConveyorCanvas, SiloCanvas, SensorCanvas):
 
 class App(RemoteIOView):
 
+    # noinspection PyPep8Naming
     def __init__(self, screenName=None, baseName=None, className='Tk', useTk=1, sync=0, use=None):
         super().__init__(screenName, baseName, className, useTk, sync, use)
 
+        # noinspection SpellCheckingInspection
         self.name.configure(text='Szalag 5 Remote IO')
         self.error_check = ErrorCheckBox(self.process_frame,
                                          silo1_process=self.s1_changed,

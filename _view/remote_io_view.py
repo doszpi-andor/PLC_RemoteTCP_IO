@@ -9,6 +9,7 @@ from _threading.thread_loop import ThreadLoop
 
 class RemoteIOView(Tk):
 
+    # noinspection PyPep8Naming
     def __init__(self, screenName=None, baseName=None, className='Tk', useTk=1, sync=0, use=None):
         super().__init__(screenName, baseName, className, useTk, sync, use)
         self.title('Remote IO')
