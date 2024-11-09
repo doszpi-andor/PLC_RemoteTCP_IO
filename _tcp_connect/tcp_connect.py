@@ -35,13 +35,11 @@ class TCPConnect:
             try:
                 self.__read_byte = self.__client_socket.recv(self.READ_BUFFER_SIZE)
                 self.__client_socket.send(self.__send_byte)
-            except timeout:
+            except (timeout, OSError):
                 self.__client_socket.close()
                 self.__client_socket = None
                 self.send_data = 0
                 self.read_data = 0
-            except OSError:
-                pass
 
     def close(self):
         if self.__client_socket is not None:
