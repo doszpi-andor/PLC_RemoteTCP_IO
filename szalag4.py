@@ -9,7 +9,7 @@ from _view.silo_camvas import SiloCanvas
 
 
 class Data:
-    input_index = {'S1': 0, 'S2': 1, 'S3': 2, 'S4': 3}
+    input_index = {'S1': 0, 'S2': 1, 'S3': 2, 'S4': 3, 'Control': 4}
     # noinspection SpellCheckingInspection
     output_index = {'M1': 0, 'M2_Bal': 1, 'M2_Jobb': 2, 'M3': 3, 'M4': 4}
 
@@ -273,6 +273,8 @@ class App(RemoteIOView):
             else:
                 self.conveyors.conveyor3_change_motor_color(motor_color='gray')
                 self.s4_changed()
+
+        self.remote_data.input_bits[Data.input_index['Control']] = True
 
         super().loop()
 
