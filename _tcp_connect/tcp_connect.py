@@ -21,6 +21,7 @@ class TCPConnect:
     def bind(self):
         self.__server_socket.bind((self.__server_host, self.__server_port))
         self.__server_socket.listen(5)
+        self.__server_socket.settimeout(2)
 
     def transfer(self):
         if self.__client_socket is None:
@@ -36,8 +37,9 @@ class TCPConnect:
                 self.__read_byte = self.__client_socket.recv(self.READ_BUFFER_SIZE)
                 self.__client_socket.send(self.__send_byte)
             except (timeout, OSError):
-                self.__client_socket.close()
-                self.__client_socket = None
+                if self.__client_socket is not None:
+                    self.__client_socket.close()
+                    self.__client_socket = None
                 self.send_data = 0
                 self.read_data = 0
 
