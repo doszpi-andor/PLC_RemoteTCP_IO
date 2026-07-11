@@ -6,6 +6,8 @@ from _data.remote_data import RemoteData
 from _tcp_connect.tcp_connect import TCPConnect
 from _threading.thread_loop import ThreadLoop
 
+from _view.ip_select import ToplevelIpSelect
+
 
 class RemoteIOView(Tk):
 
@@ -34,7 +36,9 @@ class RemoteIOView(Tk):
 
         self.remote_data = RemoteData()
 
-        self.plc_connect = TCPConnect(gethostbyname(gethostname()), 2000)
+        self.ip_select = ToplevelIpSelect(self)
+
+        self.plc_connect = TCPConnect(self.ip_select.ip_address, self.ip_select.port)
         self.plc_connect.bind()
 
         self.server_label.configure(text='Local address: %s:%i' %
