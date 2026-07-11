@@ -6,7 +6,7 @@ from _view.remote_io_view import RemoteIOView
 
 
 class Data:
-    input_index = {'S1': 0, 'S2': 1, 'S3': 2}
+    input_index = {'S1': 0, 'S2': 1, 'S3': 2, 'connect_control': 7}
     output_index = {'M1': 0, 'M2': 1, 'M3': 2}
 
 
@@ -169,6 +169,8 @@ class App(RemoteIOView):
             else:
                 self.conveyors.conveyor3_change_motor_color(motor_color='gray')
                 self.s3_changed()
+
+        self.remote_data.input_bits[Data.input_index['connect_control']] = True
 
         super().loop()
 
