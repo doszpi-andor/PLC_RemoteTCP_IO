@@ -37,6 +37,7 @@ class RemoteIOView(Tk):
         self.remote_data = RemoteData()
 
         self.ip_select = ToplevelIpSelect(self)
+        self.ip_select.wait_window()
 
         self.plc_connect = TCPConnect(self.ip_select.ip_address, self.ip_select.port)
         self.plc_connect.bind()
